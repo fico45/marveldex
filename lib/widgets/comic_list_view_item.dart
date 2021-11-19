@@ -7,8 +7,8 @@ class ComicListViewItem extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  // TODO: implement state management so the cover images can be used, so not
-  //to call the API for each cover image
+  /* TODO: implement state management so the cover images can be used, so not
+  to call the API for each cover image*/
 
   @override
   Widget build(BuildContext context) {

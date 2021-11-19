@@ -5,16 +5,13 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:marveldex/model/character_model.dart';
 
-import 'comic_model.dart';
+import '../model/comic_model.dart';
 
 class MarvelFacade {
-  final StreamController<Character> characterStreamController =
-      StreamController<Character>();
-
   final String privateKey = "8dde3100807cd31a9c94c1082f6c982f45e8ab6a";
   final String publicKey = "3a7652210333d97b63858e15edbfd10d";
 
-  Future<void> getCharacterList() async {
+  Future<Character> getCharacterList() async {
     //Get the MD5 Hash
     print("CHARACTERS CALLED!!");
     var timeStamp = DateTime.now().toString();
@@ -29,7 +26,7 @@ class MarvelFacade {
     //Response -> String / json -> deserialize
     Character character = Character.fromJson(jsonDecode(response.body));
     print(response.body);
-    characterStreamController.sink.add(character);
+    return character;
   }
 
   Future<Comic> getComicsList() async {
