@@ -7,7 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marveldex/controller/providers.dart';
 
 class CharactersScreen extends StatefulWidget {
-  const CharactersScreen({Key? key}) : super(key: key);
+  CharactersScreen({
+    Key? key,
+    //required this.tIsGrid,
+  }) : super(key: key);
+  // final bool tIsGrid;
 
   @override
   State<CharactersScreen> createState() => _CharactersScreenState();
@@ -47,7 +51,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
                       imageURL: character.data.results[index].thumbnail.path +
                           "." +
                           character.data.results[index].thumbnail.extension,
-                      name: character.data.results[index].name),
+                      name: character.data.results[index].name,
+                      isComic: false),
                 );
               }),
           error: (e, stackTrace) => const Center(

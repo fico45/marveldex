@@ -80,7 +80,7 @@ class Results {
     required this.title,
     required this.issueNumber,
     required this.variantDescription,
-    this.description,
+    required this.description,
     required this.modified,
     required this.isbn,
     required this.upc,
@@ -110,7 +110,7 @@ class Results {
   late final String title;
   late final int issueNumber;
   late final String variantDescription;
-  late final Null description;
+  late final String description;
   late final String modified;
   late final String isbn;
   late final String upc;
@@ -141,7 +141,7 @@ class Results {
     title = json['title'];
     issueNumber = json['issueNumber'];
     variantDescription = json['variantDescription'];
-    description = null;
+    description = json['description'] ?? 'No description';
     modified = json['modified'];
     isbn = json['isbn'];
     upc = json['upc'];

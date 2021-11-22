@@ -5,10 +5,12 @@ class DisplayItem extends StatelessWidget {
     Key? key,
     required this.imageURL,
     required this.name,
+    required this.isComic,
   }) : super(key: key);
 
   final String imageURL;
   final String name;
+  final bool isComic;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +21,25 @@ class DisplayItem extends StatelessWidget {
         children: [
           Center(
             child: CircleAvatar(
-              radius: 80,
+              radius: 65,
               backgroundImage: NetworkImage(imageURL),
             ),
           ),
-          Text(
-            name.toUpperCase(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
+          const SizedBox(
+            height: 15,
+          ),
+          Flexible(
+            child: Text(
+              name.toUpperCase(),
+              maxLines: isComic == false ? 2 : 1,
+              softWrap: true,
+              overflow: isComic == false
+                  ? TextOverflow.visible
+                  : TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
           ),
         ],

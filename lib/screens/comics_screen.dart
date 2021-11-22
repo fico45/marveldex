@@ -5,6 +5,7 @@ import 'package:marveldex/model/comic_model.dart';
 import 'package:marveldex/widgets/display_item.dart';
 
 import '../custom_page_route.dart';
+import 'comic_details_screen.dart';
 
 class ComicsScreen extends StatefulWidget {
   const ComicsScreen({Key? key}) : super(key: key);
@@ -17,8 +18,8 @@ class _ComicsScreenState extends State<ComicsScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      AsyncValue<Comic> character = ref.watch(comicProvider);
-      return character.when(
+      AsyncValue<Comic> comic = ref.watch(comicProvider);
+      return comic.when(
           data: (comic) => GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: (MediaQuery.of(context).orientation ==
@@ -29,16 +30,28 @@ class _ComicsScreenState extends State<ComicsScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    /* Navigator.push(
+                    Navigator.push(
                         context,
                         FadeRoute(
-                            page: )); */
+                          page: ComicDetailsScreen(
+                            imageURL: comic.data.results[index].thumbnail.path +
+                                "." +
+                                comic.data.results[index].thumbnail.extension,
+                            title: comic.data.results[index].title,
+                            description: comic.data.results[index].description,
+                            issueNumber: comic.data.results[index].issueNumber,
+                            pageCount: comic.data.results[index].pageCount,
+                            characters: comic.data.results[index].characters,
+                          ),
+                        ));
                   },
                   child: DisplayItem(
-                      imageURL: comic.data.results[index].thumbnail.path +
-                          "." +
-                          comic.data.results[index].thumbnail.extension,
-                      name: comic.data.results[index].title),
+                    imageURL: comic.data.results[index].thumbnail.path +
+                        "." +
+                        comic.data.results[index].thumbnail.extension,
+                    name: comic.data.results[index].title,
+                    isComic: true,
+                  ),
                 );
               }),
           error: (e, stackTrace) => const Center(

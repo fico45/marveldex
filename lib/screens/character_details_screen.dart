@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marveldex/model/character_model.dart';
 import 'package:marveldex/widgets/comic_list_view_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CharacterDetailsScreen extends StatelessWidget {
   const CharacterDetailsScreen({
@@ -106,8 +107,15 @@ class CharacterDetailsScreen extends StatelessWidget {
                         itemCount:
                             comics.items.length <= 2 ? comics.items.length : 2,
                         itemBuilder: (context, index) {
-                          return ComicListViewItem(
-                              title: comics.items[index].name);
+                          return Consumer(
+                            builder: (BuildContext context, WidgetRef ref,
+                                Widget? child) {
+                              return ComicListViewItem(
+                                title: comics.items[index].name,
+                                resourceURI: comics.items[index].resourceURI,
+                              );
+                            },
+                          );
                         }),
                   ],
                 ),

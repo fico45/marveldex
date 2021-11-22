@@ -39,13 +39,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    CharactersScreen(),
+  bool isGrid = true;
+
+  final List<Widget> _widgetOptions = <Widget>[
+    CharactersScreen(
+        //isGrid: isGrid,
+        ),
     ComicsScreen(),
     FavoritesScreen(),
   ];
 
   int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isGrid = !isGrid;
+              });
+            },
+            icon: isGrid ? const Icon(Icons.list) : const Icon(Icons.grid_on),
+          ),
+        ],
         title: Text(widget.title),
       ),
       body: Center(
