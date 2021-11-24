@@ -11,7 +11,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('Comics'),
+      child: Text('Favorites'),
     );
   }
 }
