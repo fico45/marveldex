@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:marveldex/controller/providers.dart';
-import 'package:marveldex/model/comic_model.dart';
+import 'package:marveldex/controller/marvel_facade.dart';
 
 class CharacterListViewItem extends StatelessWidget {
   const CharacterListViewItem({
@@ -12,6 +11,14 @@ class CharacterListViewItem extends StatelessWidget {
 
   final String resourceURI;
   final String name;
+
+  Future<String> getImageURL() async {
+    final uri = Uri.parse(resourceURI);
+    Future<String> imageURL =
+        MarvelFacade().getComicImage(uri.pathSegments.last);
+    return imageURL;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,30 +27,18 @@ class CharacterListViewItem extends StatelessWidget {
         children: [
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              //AsyncValue<Comic> comicProv = ref.watch(comicProvider);
-              //int comicIndex = comicProv.asData!.value.data.results.indexWhere((element)=>element.resourceURI == resourceURI);
-
               return ListTile(
-                leading:
-                    /*cannot figure out how to get the image for the life of me, so
-leaving it as is, until (IF) I figure it out.  */
-                    /*Image(
-                    image: NetworkImage(comic.asData!.value.data.results
-                            .firstWhere(
-                                (element) => element.resourceURI == resourceURI)
-                            .thumbnail
-                            .path +
-                        '.' +
-                        comic.asData!.value.data.results
-                            .firstWhere(
-                                (element) => element.resourceURI == resourceURI)
-                            .thumbnail
-                            .extension))*/
-                    const Image(
-                  image: AssetImage('lib/assets/no-image.png'),
-                  height: 50,
-                  width: 50,
-                ),
+                leading: FutureBuilder(
+                    future: getImageURL(),
+                    builder: (context, snapshot) {
+                      return snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator()
+                          : Image(
+                              image: NetworkImage(snapshot.data.toString()),
+                              height: 50,
+                              width: 50,
+                            );
+                    }),
                 title: Text(name),
               );
             },

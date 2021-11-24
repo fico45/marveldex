@@ -14,7 +14,6 @@ class MarvelFacade {
   //returns characters from an API (only 100 of them as cannot fetch more)
   Future<Character> getCharacterList() async {
     //Get the MD5 Hash
-    print("CHARACTERS CALLED!!");
     var timeStamp = DateTime.now().toString();
     var hash = createHash(timeStamp);
 
@@ -26,7 +25,6 @@ class MarvelFacade {
     http.Response response = await http.get(Uri.parse(url));
     //Response -> String / json -> deserialize
     Character character = Character.fromJson(jsonDecode(response.body));
-    print(response.body);
     return character;
   }
 
@@ -37,7 +35,6 @@ class MarvelFacade {
     String url =
         "https://gateway.marvel.com:443/v1/public/characters/$characterID?apikey=$publicKey&ts=$timeStamp&hash=$hash";
     http.Response response = await http.get(Uri.parse(url));
-    print('SINGLE CHARACTER RESPONSE: ' + response.body);
     Character character = Character.fromJson(jsonDecode(response.body));
     String imageURL = character.data.results[0].thumbnail.path +
         '.' +
@@ -45,18 +42,25 @@ class MarvelFacade {
     return imageURL;
   }
 
+  //gets a single character object
+  Future<Character> getSingleCharacter(String characterID) async {
+    var timeStamp = DateTime.now().toString();
+    var hash = createHash(timeStamp);
+    String url =
+        "https://gateway.marvel.com:443/v1/public/characters/$characterID?apikey=$publicKey&ts=$timeStamp&hash=$hash";
+    http.Response response = await http.get(Uri.parse(url));
+    Character character = Character.fromJson(jsonDecode(response.body));
+    return character;
+  }
+
   //returns comics from an API (only 100 of them as cannot fetch more)
   Future<Comic> getComicsList() async {
     var timeStamp = DateTime.now().toString();
     var hash = createHash(timeStamp);
-
-    print("COMICS CALLED!!!");
-
     String url =
         "https://gateway.marvel.com:443/v1/public/comics?limit=100&apikey=$publicKey&ts=$timeStamp&hash=$hash";
 
     http.Response response = await http.get(Uri.parse(url));
-    print(response.body);
     Comic comic = Comic.fromJson(jsonDecode(response.body));
 
     return comic;
@@ -66,15 +70,26 @@ class MarvelFacade {
   Future<String> getComicImage(String comicID) async {
     var timeStamp = DateTime.now().toString();
     var hash = createHash(timeStamp);
+
     String url =
-        "https://gateway.marvel.com:443/v1/public/characters/$comicID?apikey=$publicKey&ts=$timeStamp&hash=$hash";
+        "https://gateway.marvel.com:443/v1/public/comics/$comicID?apikey=$publicKey&ts=$timeStamp&hash=$hash";
     http.Response response = await http.get(Uri.parse(url));
-    print('SINGLE CHARACTER RESPONSE: ' + response.body);
     Comic comic = Comic.fromJson(jsonDecode(response.body));
     String imageURL = comic.data.results[0].thumbnail.path +
         '.' +
         comic.data.results[0].thumbnail.extension;
     return imageURL;
+  }
+
+  //gets a single comic object
+  Future<Comic> getSingleComic(String comicID) async {
+    var timeStamp = DateTime.now().toString();
+    var hash = createHash(timeStamp);
+    String url =
+        "https://gateway.marvel.com:443/v1/public/comics/$comicID?apikey=$publicKey&ts=$timeStamp&hash=$hash";
+    http.Response response = await http.get(Uri.parse(url));
+    Comic comic = Comic.fromJson(jsonDecode(response.body));
+    return comic;
   }
 
   String createHash(String timeStamp) {

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marveldex/controller/providers.dart';
 
 class CharactersScreen extends StatefulWidget {
-  CharactersScreen({
+  const CharactersScreen({
     Key? key,
     //required this.tIsGrid,
   }) : super(key: key);

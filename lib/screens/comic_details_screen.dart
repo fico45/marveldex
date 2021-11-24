@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:marveldex/controller/marvel_facade.dart';
+import 'package:marveldex/custom_page_route.dart';
 import 'package:marveldex/model/comic_model.dart' as Characters;
-import 'package:marveldex/model/comic_model.dart';
+import 'package:marveldex/screens/character_details_screen.dart';
 import 'package:marveldex/widgets/comic_list_view_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -165,10 +166,46 @@ class ComicDetailsScreen extends StatelessWidget {
                                 return Consumer(
                                   builder: (BuildContext context, WidgetRef ref,
                                       Widget? child) {
-                                    return ComicListViewItem(
-                                      title: characters.items[index].name,
-                                      resourceURI:
-                                          characters.items[index].resourceURI,
+                                    return InkWell(
+                                      onTap: () {
+                                        //missing circular loading indicator while data is loading
+                                        MarvelFacade()
+                                            .getSingleCharacter(Uri.parse(
+                                                    characters.items[index]
+                                                        .resourceURI)
+                                                .pathSegments
+                                                .last)
+                                            .then((value) {
+                                          Navigator.push(
+                                            context,
+                                            FadeRoute(
+                                              //works for the first element, but throws an asynchronous suspension on the 2nd :(
+                                              page: CharacterDetailsScreen(
+                                                  imageURL: value
+                                                          .data
+                                                          .results[index]
+                                                          .thumbnail
+                                                          .path +
+                                                      '.' +
+                                                      value.data.results[index]
+                                                          .thumbnail.extension,
+                                                  name: value
+                                                      .data.results[index].name,
+                                                  description: value
+                                                      .data
+                                                      .results[index]
+                                                      .description,
+                                                  comics: value.data
+                                                      .results[index].comics),
+                                            ),
+                                          );
+                                        });
+                                      },
+                                      child: ComicListViewItem(
+                                        title: characters.items[index].name,
+                                        resourceURI:
+                                            characters.items[index].resourceURI,
+                                      ),
                                     );
                                   },
                                 );
